@@ -43,7 +43,7 @@ function TripCard({ trip }) {
 
         <div className="flex items-center justify-between border-t border-gray-100 pt-3">
           <div className="flex items-center gap-2">
-            <div className="w-[26px] h-[26px] rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-medium text-gray-500">
+            <div className="w-26px h-26px rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-medium text-gray-500">
               {trip.initials}
             </div>
             <span className="text-xs text-gray-500">{trip.host}</span>
