@@ -1,5 +1,6 @@
 // import React from 'react'
 
+import CreateTripSection from "../components/landing/CreateTripSection";
 import HeroSection from "../components/landing/HeroSection";
 import PopularDestinations from "../components/landing/PopularDestinations";
 import Footer from "../components/layout/Footer";
@@ -11,6 +12,8 @@ function LandingPage() {
       <Navbar />
       <HeroSection />
       <PopularDestinations />
+      <CreateTripSection />
+      
       <Footer />
     </>
   );

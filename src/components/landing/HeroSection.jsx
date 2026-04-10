@@ -1,3 +1,5 @@
+import bgImage from "../../assets/foreground.png";
+
 function HeroSection() {
   return (
     <section
@@ -8,10 +10,11 @@ function HeroSection() {
           "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80')",
         backgroundSize: "cover",
         backgroundPosition: "center",
+        backgroundAttachment: "fixed",
       }}
     >
       <div className="absolute inset-0 bg-black/60"></div>
-
+      
       <div className="relative z-10 text-white">
         <h1 className="text-5xl font-semibold mb-4">
           Find Your Perfect Travel Companion
