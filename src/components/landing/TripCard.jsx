@@ -1,11 +1,11 @@
 function TripCard({ trip }) {
   return (
-    <div className="flex-shrink-0 w-[400px] h-[490px] bg-white rounded-2xl overflow-hidden cursor-pointer
+    <div className="flex-shrink-0 h-300px bg-white rounded-2xl overflow-hidden cursor-pointer
       border border-white/10 shadow-md
       transition-all duration-300 ease-out
       hover:-translate-y-3 hover:scale-[1.06] hover:shadow-[0_28px_56px_rgba(0,0,0,0.4)]">
 
-      <div className="relative h-[190px] overflow-hidden">
+      <div className="relative h-190px overflow-hidden">
         <img
           src={trip.image}
           alt={trip.destination}

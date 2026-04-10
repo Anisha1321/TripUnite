@@ -25,7 +25,7 @@ function PopularDestinations() {
         style={{ background: "linear-gradient(to left, rgba(10,10,20,0.85), transparent)" }}
       /> */}
 
-      <div className="relative z-10">
+      <div className="relative mb-30 z-10">
         {/* Header */}
         <div className="text-center mb-10">
           <p className="text-xs font-medium tracking-widest text-white/50 uppercase mb-2">
@@ -42,7 +42,7 @@ function PopularDestinations() {
         {/* Marquee */}
         <div className="w-full" style={{ maskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)" }}>
           <div className="overflow-hidden">
-            <div className="flex gap-10 w-max py-10 animate-marquee pause-on-hover">
+            <div className="flex gap-10  py-10 animate-marquee pause-on-hover">
               {[...trips, ...trips].map((trip, i) => (
                 <TripCard key={i} trip={trip} />
               ))}
