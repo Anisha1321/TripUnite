@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 function Navbar() {
 
 
@@ -35,10 +35,17 @@ function Navbar() {
       </span>
 
       <div className="flex items-center gap-6 ">
-        <a href="/explore" className=" font-medium text-gray-200 hover:text-gray-400">Explore Trips</a>
-        <a href="#" className="font-medium text-gray-200 hover:text-gray-400">Create Trip</a>
-        <a href="#" className="font-medium text-gray-200 hover:text-gray-400">Dashboard</a>
+        <Link to="/explore" className="font-medium text-gray-200 hover:text-gray-400">
+          Explore Trips
+        </Link>
 
+        <Link to="/create-trip" className="font-medium text-gray-200 hover:text-gray-400">
+          Create Trip
+        </Link>
+
+        <Link to="/dashboard" className="font-medium text-gray-200 hover:text-gray-400">
+          Dashboard
+        </Link>
         <button onClick={() => navigate("/auth")} className="text-sm font-bold px-6 py-1.5 rounded-lg bg-gray-100 border border-gray-300 hover:text-gray-900">
           Login / Sign Up
         </button>
