@@ -1,5 +1,6 @@
-
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 export default function Navbar() {
 
     const [scrolled, setScrolled] = useState(false);
@@ -25,9 +26,9 @@ export default function Navbar() {
       }`}
     >
 
-      <span className="text-[34px] font-medium text-gray-400">
+      <Link to="/" className="text-[34px] font-medium text-gray-400">
         Trip<span className="text-white">Unite</span>
-      </span>
+      </Link>
 
       {/* <div className="flex gap-6 ml-10 font-medium text-gray-200">        
         <span className="hover:text-gray-400 cursor-pointer ">Create Trip</span>

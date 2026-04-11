@@ -30,9 +30,9 @@ function Navbar() {
           : "bg-[#0D1117]/30"
       }`}
     >
-      <span className="text-[34px] font-medium text-gray-400">
+      <Link to="/" className="text-[34px] font-medium text-gray-400">
         Trip<span className="text-white">Unite</span>
-      </span>
+      </Link>
 
       <div className="flex items-center gap-6 ">
         <Link to="/explore" className="font-medium text-gray-200 hover:text-gray-400">
