@@ -1,5 +1,11 @@
 function Footer() {
-  const links = ["Explore Trips", "Create Trip", "About", "Contact"];
+  const links1 = ["Explore Trips", "Create Trip", "About", "Contact"];
+  const links = [
+  { name: "Explore Trips", path: "/explore" },
+  { name: "Create Trip", path: "/create-trip" },
+  { name: "About", path: "/about" },
+  { name: "Contact", path: "/contact" },
+];
 
   return (
     <footer className="bg-[#111827] px-6 md:px-10 pt-14 pb-8">
@@ -15,10 +21,10 @@ function Footer() {
             {links.map((link) => (
               <a
                 key={link}
-                href="#"
+                href={link.path}
                 className="text-[13.5px] text-gray-400 hover:text-gray-100 transition-colors"
               >
-                {link}
+                {link.name}
               </a>
             ))}
           </div>

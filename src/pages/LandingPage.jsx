@@ -11,9 +11,9 @@ function LandingPage() {
     <>
       <Navbar />
       <HeroSection />
-      <PopularDestinations />
-      <CreateTripSection />
       
+      <PopularDestinations />
+      <CreateTripSection /> 
       <Footer />
     </>
   );

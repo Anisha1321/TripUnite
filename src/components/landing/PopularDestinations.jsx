@@ -1,11 +1,13 @@
 import TripCard from "./TripCard";
 import trips from "../../data/trips";
 import bgImage from "../../assets/foreground.png";
+import { useNavigate } from "react-router-dom";
 
 function PopularDestinations() {
+  const navigate = useNavigate();
   return (
     <section
-      className="relative z-20 py-10 min-h-[92vh] overflow-hidden"
+      className="relative z-20 pt-30 min-h-[100vh] overflow-hidden"
       style={{
         backgroundImage:
           "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80')",
@@ -31,7 +33,7 @@ function PopularDestinations() {
           <p className="text-xs font-medium tracking-widest text-white/50 uppercase mb-2">
             Explore India
           </p>
-          <h2 className="text-4xl font-semibold text-white">Popular Destinations</h2>
+          <h2 className="text-4xl font-semibold   text-white">Popular Destinations</h2>
         </div>
 
         <p className="text-center text-[11px] text-white/40 border border-white/15 rounded-full 
@@ -49,6 +51,13 @@ function PopularDestinations() {
             </div>
           </div>
         </div>
+
+        <div className="flex justify-center mt-6">
+          <button onClick={() => navigate("/explore")} className="px-6 py-3 rounded-lg border border-gray-300 text-gray-200 font-semibold hover:bg-gray-400 hover:text-black hover:scale-105 transition-all duration-200">
+            View More Trips
+          </button>
+        </div>
+
       </div>
     </section>
   );

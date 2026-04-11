@@ -1,11 +1,15 @@
 import bgImage from "../../assets/foreground.png";
+import { useNavigate } from "react-router-dom";
 
 function HeroSection() {
+
+  const navigate = useNavigate();
+
   return (
     <section
-      className="relative flex items-center justify-center text-center"
+      className="relative flex items-center justify-center text-center -mt-30 pt-50 pb-10"
       style={{
-        minHeight: "92vh",
+        minHeight: "113vh",
         backgroundImage:
           "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80')",
         backgroundSize: "cover",
@@ -15,7 +19,9 @@ function HeroSection() {
     >
       <div className="absolute inset-0 bg-black/60"></div>
       
-      <div className="relative z-10 text-white">
+      
+
+      <div className="relative mt-20 z-10 text-white">
         <h1 className="text-5xl font-semibold mb-4">
           Find Your Perfect Travel Companion
         </h1>
@@ -29,7 +35,7 @@ function HeroSection() {
             Create Trip
           </button>
 
-          <button className="px-6 py-3 rounded-lg border border-gray-300 text-gray-200 font-semibold hover:bg-gray-400 hover:text-black hover:scale-105 transition-colors duration-200">
+          <button onClick={() => navigate("/explore")} className="px-6 py-3 rounded-lg border border-gray-300 text-gray-200 font-semibold hover:bg-gray-400 hover:text-black hover:scale-105 transition-colors duration-200">
             Explore Trips
           </button>
         </div>
