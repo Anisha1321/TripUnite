@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-const NAV_LINKS = ["About", "Features", "How It Works", "Contact"];
+import { useNavigate } from "react-router-dom";
 
-function ContactNavbar() {
-  const [scrolled, setScrolled] = useState(false);
+function LandingNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
+  const navigate = useNavigate();
   return (
     <nav
       className="fixed top-0 bg-[#111827] left-0 right-0 z-50 transition-all duration-300"
@@ -40,11 +33,25 @@ function ContactNavbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-7">
-          {NAV_LINKS.map((l) => (
+          {/* {NAV_LINKS.map((l) => (
             <a key={l} href="#" className="text-[13px] text-gray-400 hover:text-gray-100">
               {l}
             </a>
-          ))}
+          ))} */}
+          <Link to="/about" className="text-[13px] text-gray-400 hover:text-gray-100">
+            About
+          </Link>
+
+          <Link to="/contact" className="text-[13px] text-gray-400 hover:text-gray-100">
+            Contact
+          </Link>
+
+          <Link to="/dashboard" className="text-[13px] text-gray-400 hover:text-gray-100 ">
+            Dashboard
+          </Link>
+          <button onClick={() => navigate("/auth")} className="text-[13px] text-white border border-white px-4 py-1.5 rounded-lg hover:bg-white hover:text-black hover:font-medium transition">
+            Login / Sign Up
+          </button>
         </div>
 
         <button className="md:hidden text-gray-400" onClick={() => setMenuOpen(!menuOpen)}>
@@ -55,4 +62,4 @@ function ContactNavbar() {
   );
 }
 
-export default ContactNavbar;
+export default LandingNavbar;

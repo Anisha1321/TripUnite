@@ -37,6 +37,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import Navbar from "../components/layout/Navbar";
+import { useNavigate } from "react-router-dom";
 
 function useInView(threshold = 0.12) {
   const ref = useRef(null);
@@ -195,6 +196,7 @@ export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [focused, setFocused] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -247,7 +249,7 @@ export default function ContactPage() {
           borderBottom: scrolled ? "1px solid rgba(29,158,117,0.12)" : "none",
         }}
       >
-        <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+        <div className="mx-auto px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg,#1D9E75,#0F6E56)" }}>
               <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -256,14 +258,14 @@ export default function ContactPage() {
             </div>
             <span className="font-semibold text-gray-100 tracking-tight text-[15px]">TripUnite</span>
           </div>
-          <div className="hidden md:flex items-center gap-7">
+          {/* <div className="hidden md:flex items-center gap-7">
             {NAV_LINKS.map((l) => (
               <a key={l} href="#" className="text-[13px] text-gray-400 hover:text-gray-100 transition-colors duration-200">{l}</a>
             ))}
-          </div>
+          </div> */}
           <div className="hidden md:flex items-center gap-3">
             <button className="text-[13px] text-gray-400 hover:text-gray-100 transition-colors px-3 py-1.5">Sign in</button>
-            <button className="btn-primary text-white text-[13px] font-medium px-4 py-2 rounded-lg">Get started</button>
+            <button onClick={() => navigate("/")} className="btn-primary text-white text-[13px] font-medium px-4 py-2 rounded-lg">Get started</button>
           </div>
           <button className="md:hidden text-gray-400" onClick={() => setMenuOpen(!menuOpen)}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

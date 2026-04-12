@@ -31,7 +31,7 @@ function HeroSection() {
         </p>
 
         <div className="flex gap-4 justify-center">
-          <button className="px-8 py-3 rounded-lg border border-gray-300 text-gray-200 font-semibold hover:bg-gray-400 hover:text-black hover:scale-105 transition-colors duration-200">
+          <button onClick={() => navigate("/create")} className="px-8 py-3 rounded-lg border border-gray-300 text-gray-200 font-semibold hover:bg-gray-400 hover:text-black hover:scale-105 transition-colors duration-200">
             Create Trip
           </button>
 

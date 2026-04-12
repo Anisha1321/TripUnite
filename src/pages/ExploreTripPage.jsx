@@ -13,8 +13,8 @@ export default function ExploreTripPage() {
 
       <Navbar />
 
-      <Hero />
-      <FilterBar/>
+      {/* <Hero /> */}
+      {/* <FilterBar/> */}
       <TripSection />
       <Footer />
 

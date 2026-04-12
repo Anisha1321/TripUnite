@@ -12,7 +12,7 @@ export default function Hero() {
     >
     {/* <div className="absolute inset-0 bg-black/60"></div> */}
       <div className="absolute inset-0 bg-black/50"></div>
-      <div className="relative flex flex-col items-center z-10 max-w-[1280px] mx-auto mt-30">
+      <div className="relative fixed flex flex-col items-center z-10 max-w-[1280px] mx-auto mt-30">
 
         <h1 className="text-3xl font-bold text-white">
           Explore and <span className="text-purple-400">JOIN</span> Group Trips <span className="text-purple-400">Around India</span> 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const NAV_LINKS = ["About", "Features", "How It Works", "Community"];
 
@@ -138,6 +139,7 @@ const stats = [
 export default function Aboutpage() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -174,7 +176,7 @@ export default function Aboutpage() {
           borderBottom: scrolled ? "1px solid rgba(29,158,117,0.12)" : "none",
         }}
       >
-        <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+        <div className="mx-auto px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg,#1D9E75,#0F6E56)" }}>
               <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -184,15 +186,15 @@ export default function Aboutpage() {
             <span className="font-semibold text-gray-100 tracking-tight text-[15px]">TripUnite</span>
           </div>
 
-          <div className="hidden md:flex items-center gap-7">
+          {/* <div className="hidden md:flex items-center gap-7">
             {NAV_LINKS.map((l) => (
               <a key={l} href="#" className="text-[13px] text-gray-400 hover:text-gray-100 transition-colors duration-200 tracking-wide">{l}</a>
             ))}
-          </div>
+          </div> */}
 
           <div className="hidden md:flex items-center gap-3">
-            <button className="text-[13px] text-gray-400 hover:text-gray-100 transition-colors px-3 py-1.5">Sign in</button>
-            <button className="btn-primary text-white text-[13px] font-medium px-4 py-2 rounded-lg">Get started</button>
+            <button onClick={() => navigate("/auth")} className="text-[13px] text-gray-400 hover:text-gray-100 transition-colors px-3 py-1.5">Sign in</button>
+            <button onClick={() => navigate("/")} className="btn-primary text-white text-[13px] font-medium px-4 py-2 rounded-lg">Get started</button>
           </div>
 
           <button className="md:hidden text-gray-400" onClick={() => setMenuOpen(!menuOpen)}>
@@ -204,9 +206,9 @@ export default function Aboutpage() {
 
         {menuOpen && (
           <div className="md:hidden px-5 pb-5 space-y-3 border-t" style={{ borderColor: "rgba(29,158,117,0.12)", backgroundColor: "rgba(13,17,23,0.97)" }}>
-            {NAV_LINKS.map((l) => (
+            {/* {NAV_LINKS.map((l) => (
               <a key={l} href="#" className="block text-[14px] text-gray-400 py-1">{l}</a>
-            ))}
+            ))} */}
             <button className="btn-primary w-full text-white text-[13px] font-medium px-4 py-2.5 rounded-lg mt-2">Get started</button>
           </div>
         )}
@@ -240,7 +242,7 @@ export default function Aboutpage() {
             </p>
 
             <div className="flex flex-wrap gap-3">
-              <button className="btn-primary text-white font-medium px-6 py-3 rounded-xl text-[14px]">
+              <button onClick={() => navigate("/explore")} className="btn-primary text-white font-medium px-6 py-3 rounded-xl text-[14px]">
                 Start exploring →
               </button>
               <button className="btn-outline text-gray-300 font-medium px-6 py-3 rounded-xl text-[14px]"
@@ -413,7 +415,7 @@ export default function Aboutpage() {
                   Join thousands of travellers who've already found their perfect crew. Your next adventure is waiting.
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
-                  <button className="btn-primary text-white font-medium px-7 py-3.5 rounded-xl text-[14px]">
+                  <button onClick={() => navigate("/explore")} className="btn-primary text-white font-medium px-7 py-3.5 rounded-xl text-[14px]">
                     Explore trips →
                   </button>
                   <button className="btn-outline text-gray-300 font-medium px-7 py-3.5 rounded-xl text-[14px]"
