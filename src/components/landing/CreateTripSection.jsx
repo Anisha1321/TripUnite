@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 function CreateTripSection() {
+  const navigate = useNavigate();
   return (
     <section className="py-24 px-6 bg-white">
       <div className="max-w-6xl h-700px mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -23,7 +26,7 @@ function CreateTripSection() {
             <li>✔ Chat and plan your trip together</li>
           </ul>
 
-          <button className="px-8 py-3 rounded-lg bg-gray-900 text-white font-semibold hover:bg-gray-700 transition">
+          <button onClick={() => navigate("/create")} className="px-8 py-3 rounded-lg bg-gray-900 text-white font-semibold hover:bg-gray-700 transition">
             Create a Trip
           </button>
         </div>

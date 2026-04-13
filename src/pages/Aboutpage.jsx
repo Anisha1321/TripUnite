@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NAV_LINKS = ["About", "Features", "How It Works", "Community"];
 
@@ -169,50 +170,58 @@ export default function Aboutpage() {
 
       {/* ── Navbar ── */}
       <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-        style={{
-          backgroundColor: scrolled ? "rgba(13,17,23,0.92)" : "transparent",
-          backdropFilter: scrolled ? "blur(12px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(29,158,117,0.12)" : "none",
-        }}
-      >
-        <div className="mx-auto px-5 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg,#1D9E75,#0F6E56)" }}>
-              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-              </svg>
-            </div>
-            <span className="font-semibold text-gray-100 tracking-tight text-[15px]">TripUnite</span>
-          </div>
-
-          {/* <div className="hidden md:flex items-center gap-7">
-            {NAV_LINKS.map((l) => (
-              <a key={l} href="#" className="text-[13px] text-gray-400 hover:text-gray-100 transition-colors duration-200 tracking-wide">{l}</a>
-            ))}
-          </div> */}
-
-          <div className="hidden md:flex items-center gap-3">
-            <button onClick={() => navigate("/auth")} className="text-[13px] text-gray-400 hover:text-gray-100 transition-colors px-3 py-1.5">Sign in</button>
-            <button onClick={() => navigate("/")} className="btn-primary text-white text-[13px] font-medium px-4 py-2 rounded-lg">Get started</button>
-          </div>
-
-          <button className="md:hidden text-gray-400" onClick={() => setMenuOpen(!menuOpen)}>
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+      className="fixed top-0 bg-[#111827] left-0 right-0 z-50 transition-all duration-300"
+      style={{
+        backgroundColor: scrolled ? "rgba(13,17,23,0.92)" : "transparent",
+        backdropFilter: scrolled ? "blur(12px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(29,158,117,0.12)" : "none",
+      }}
+    >
+      <div className=" mx-auto px-10 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg,#1D9E75,#0F6E56)" }}>
+            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
             </svg>
-          </button>
+          </div>
+
+          {/* <span className="font-semibold text-gray-100 tracking-tight text-[15px]">
+            TripUnite
+          </span> */}
+          <Link to="/" className="text-[15px] font-medium text-gray-400">
+            Trip<span className="text-white">Unite</span>
+          </Link>
+          
         </div>
 
-        {menuOpen && (
-          <div className="md:hidden px-5 pb-5 space-y-3 border-t" style={{ borderColor: "rgba(29,158,117,0.12)", backgroundColor: "rgba(13,17,23,0.97)" }}>
-            {/* {NAV_LINKS.map((l) => (
-              <a key={l} href="#" className="block text-[14px] text-gray-400 py-1">{l}</a>
-            ))} */}
-            <button className="btn-primary w-full text-white text-[13px] font-medium px-4 py-2.5 rounded-lg mt-2">Get started</button>
-          </div>
-        )}
-      </nav>
+        <div className="hidden md:flex items-center gap-7">
+          {/* {NAV_LINKS.map((l) => (
+            <a key={l} href="#" className="text-[13px] text-gray-400 hover:text-gray-100">
+              {l}
+            </a>
+          ))} */}
+          <Link to="/about" className="text-[13px] text-gray-400 hover:text-gray-100">
+            About
+          </Link>
+
+          <Link to="/contact" className="text-[13px] text-gray-400 hover:text-gray-100">
+            Contact
+          </Link>          
+          {/* <button onClick={() => navigate("/auth")} className="text-[13px] text-white border border-white px-4 py-1.5 rounded-lg hover:bg-white hover:text-black hover:font-medium transition">
+            Login / Sign Up
+          </button> */}
+          <button onClick={() => navigate("/explore")} className="btn-primary text-white text-[13px] font-medium px-4 py-2 rounded-lg">Get started</button>
+          <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs">
+               AM
+         </div>
+        </div>
+
+        <button className="md:hidden text-gray-400" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+        </button>
+      </div>
+    </nav>
 
       {/* ── Hero ── */}
       <section className="relative pt-32 pb-24 px-5 overflow-hidden noise-bg" style={{ minHeight: "92vh", display: "flex", alignItems: "center" }}>

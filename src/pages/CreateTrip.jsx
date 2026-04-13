@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Navbar from "../components/explore/Navbar";
 
 /* ─── Utility: inject Google Fonts & global styles once ─── */
 const GlobalStyles = () => (
@@ -305,6 +306,7 @@ const PreviewCard = ({ form, coverUrl }) => {
 
   return (
     <div className="preview-card fade-in-4">
+
       {/* Cover Image */}
       <div style={{ position: "relative", height: 200, background: "linear-gradient(135deg,#0f2027,#203a43,#2c5364)", overflow: "hidden" }}>
         {coverUrl ? (
@@ -426,15 +428,16 @@ export default function CreateTrip() {
   return (
     <>
       <GlobalStyles />
-      <div className="noise-bg" style={{ minHeight: "100vh", background: "#0D1117", paddingBottom: 80 }}>
+   
+      <div className="noise-bg pt-20" style={{ minHeight: "100vh", background: "#0D1117", paddingBottom: 80 }}>
 
         {/* ── Radial glow ── */}
         {/* <div style={{ position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", width: 900, height: 500, background: "radial-gradient(ellipse at 50% 0%, rgba(29,158,117,0.12) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} /> */}
-
-        <div style={{ position: "relative", zIndex: 1, maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
-
+        
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 1200, margin: "0 auto", padding: "10px 24px" }}>
+          <Navbar />
           {/* ─── HERO ─── */}
-          <div style={{ paddingTop: 80, paddingBottom: 64, textAlign: "center" }}>
+          <div style={{ paddingTop: 40, paddingBottom: 64, textAlign: "center" }}>
             <div className="fade-in" style={{ marginBottom: 18 }}>
               <span className="tag-badge">
                 <span className="glow-dot" />

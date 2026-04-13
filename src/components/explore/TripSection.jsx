@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function TripSection() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const navigate = useNavigate();
 
   const trips = [
     {
@@ -105,7 +107,7 @@ export default function TripSection() {
   
 
   return (
-    <div className="flex h-screen mt-16">
+    <div className="flex h-screen relative ">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&display=swap');
         .grad-text { background: linear-gradient(135deg, #5DCAA5 0%, #1D9E75 50%, #9FE1CB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -167,7 +169,7 @@ export default function TripSection() {
           <h1 className="text-4xl text-white sm:text-5xl md:text-4xl font-light leading-tight tracking-tight mt-3" style={{ fontFamily: "'Fraunces', serif" }}>
             Upcoming <span className="grad-text italic">Trips.</span>
           </h1>
-          <button className="btn-primary  text-white text-[13px] font-medium px-4 py-2 rounded-lg">
+          <button onClick={() => navigate("/create")} className="btn-primary  text-white text-[13px] font-medium px-4 py-2 rounded-lg">
             + Create Trip
           </button>
         </div>

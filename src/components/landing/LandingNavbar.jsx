@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function LandingNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+
   const navigate = useNavigate();
   return (
     <nav
@@ -58,6 +59,47 @@ function LandingNavbar() {
           ☰
         </button>
       </div>
+
+        {menuOpen && (
+          <div className="md:hidden items-center absolute right-6 mt-2 px-6 py-4 flex flex-col gap-4 bg-[#111827] rounded-lg shadow-lg w-max">
+            
+            <Link 
+              to="/about" 
+              className="text-gray-400 hover:text-white"
+              onClick={() => setMenuOpen(false)}
+            >
+              About
+            </Link>
+
+            <Link 
+              to="/contact" 
+              className="text-gray-400 hover:text-white"
+              onClick={() => setMenuOpen(false)}
+            >
+              Contact
+            </Link>
+
+            <Link 
+              to="/dashboard" 
+              className="text-gray-400 hover:text-white"
+              onClick={() => setMenuOpen(false)}
+            >
+              Dashboard
+            </Link>
+
+            <button 
+              onClick={() => {
+                navigate("/auth");
+                setMenuOpen(false);
+              }}
+              className="text-white border border-white px-6 py-2 rounded-lg"
+            >
+              Login
+            </button>
+
+          </div>
+        )}
+
     </nav>
   );
 }

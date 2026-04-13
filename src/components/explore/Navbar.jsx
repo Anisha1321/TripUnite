@@ -7,7 +7,7 @@ function Navbar() {
   const navigate = useNavigate();
   return (
     <nav
-      className="fixed top-0 bg-[#0D1117] left-0 right-0 z-50 transition-all duration-300"
+      className="sticky top-0 bg-[#0D1117] left-0 right-0 z-50 transition-all duration-300 "
       // style={{
       //   backgroundColor: scrolled ? "rgba(13,17,23,0.92)" : "transparent",
       //   backdropFilter: scrolled ? "blur(12px)" : "none",

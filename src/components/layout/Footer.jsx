@@ -3,7 +3,7 @@ function Footer() {
 
   const links = [
     { name: "Explore Trips", path: "/explore" },
-    { name: "Create Trip", path: "/create-trip" },
+    { name: "Create Trip", path: "/create" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
