@@ -209,7 +209,7 @@ export default function TripSection() {
                   </div>
 
                   <div className="flex gap-2">
-                    <button className="btn-primary w-full text-white text-[13px] font-medium px-4 py-2 rounded-lg">
+                    <button onClick={() => navigate("/details")} className="btn-primary w-full text-white text-[13px] font-medium px-4 py-2 rounded-lg">
                       View
                     </button>
                     <button className="btn-primary w-full text-white text-[13px] font-medium px-4 py-2 rounded-lg">

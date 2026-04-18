@@ -7,6 +7,7 @@ import ExploreTripPage from './pages/ExploreTripPage';
 import Aboutpage from './pages/Aboutpage';
 import ContactPage from './pages/ContactPage';
 import CreateTrip from './pages/CreateTrip';
+import TripDetails from './pages/TripDetails';
 
 
 
@@ -19,6 +20,8 @@ function App() {
       <Route path="/about" element= {<Aboutpage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/create" element={<CreateTrip/>} />
+      <Route path="/details" element={<TripDetails/>} />
+      
     </Routes>
   );
 }

@@ -4,15 +4,22 @@ import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false); 
   const navigate = useNavigate();
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <nav
       className="sticky top-0 bg-[#0D1117] left-0 right-0 z-50 transition-all duration-300 "
-      // style={{
-      //   backgroundColor: scrolled ? "rgba(13,17,23,0.92)" : "transparent",
-      //   backdropFilter: scrolled ? "blur(12px)" : "none",
-      //   borderBottom: scrolled ? "1px solid rgba(29,158,117,0.12)" : "none",
-      // }}
+      style={{
+        backgroundColor: scrolled ? "rgba(13,17,23,0.92)" : "#0D1117",
+        backdropFilter: scrolled ? "blur(12px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(29,158,117,0.12)" : "none",
+      }}
     >
       <div className=" mx-auto px-10 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
