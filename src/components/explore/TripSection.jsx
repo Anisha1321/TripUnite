@@ -1,94 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import { db } from "../../firebase";
+import { useEffect } from "react";
 
 export default function TripSection() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const navigate = useNavigate();
 
-  const trips = [
-    {
-      id: 1,
-      title: "Mystical Ladakh Expedition",
-      destination: "Ladakh, India",
-      price: 18500,
-      duration: "7 days",
-      image:
-        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-    },
-    {
-      id: 2,
-      title: "Goa Beach Escape",
-      destination: "Goa, India",
-      price: 8200,
-      duration: "4 days",
-      image:
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
-    },
-    {
-      id: 3,
-      title: "Bali Spiritual Journey",
-      destination: "Bali, Indonesia",
-      price: 22000,
-      duration: "6 days",
-      image:
-        "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
-    },
-    {
-      id: 1,
-      title: "Mystical Ladakh Expedition",
-      destination: "Ladakh, India",
-      price: 18500,
-      duration: "7 days",
-      image:
-        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-    },
-    {
-      id: 2,
-      title: "Goa Beach Escape",
-      destination: "Goa, India",
-      price: 8200,
-      duration: "4 days",
-      image:
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
-    },
-    {
-      id: 3,
-      title: "Bali Spiritual Journey",
-      destination: "Bali, Indonesia",
-      price: 22000,
-      duration: "6 days",
-      image:
-        "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
-    },
-    {
-      id: 1,
-      title: "Mystical Ladakh Expedition",
-      destination: "Ladakh, India",
-      price: 18500,
-      duration: "7 days",
-      image:
-        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-    },
-    {
-      id: 2,
-      title: "Goa Beach Escape",
-      destination: "Goa, India",
-      price: 8200,
-      duration: "4 days",
-      image:
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
-    },
-    {
-      id: 3,
-      title: "Bali Spiritual Journey",
-      destination: "Bali, Indonesia",
-      price: 22000,
-      duration: "6 days",
-      image:
-        "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
-    },
-  ];
+  const [trips, setTrips] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const q = query(collection(db, "trips"), orderBy("createdAt", "desc"));
+    const unsub = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTrips(data);
+      setLoading(false);
+    });
+    return unsub;
+  }, []);
 
   // 🔍 Filter logic
   const filteredTrips = trips.filter((trip) => {
@@ -178,7 +113,7 @@ export default function TripSection() {
         <div className="overflow-y-auto m-6 rounded-2xl px-6 py-6 bg-gray-300">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
 
-            {filteredTrips.map((trip) => (
+            {/* {filteredTrips.map((trip) => (
               <div
                 key={trip.id}
                 className="bg-gray-900 flex flex-col rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition cursor-pointer"
@@ -220,7 +155,162 @@ export default function TripSection() {
                 </div>
 
               </div>
-            ))}
+            ))} */}
+
+            {loading ? (
+              <div className="flex items-center justify-center py-20 col-span-3">
+                <div className="w-6 h-6  rounded-full animate-spin" />
+              </div>
+            ) : filteredTrips.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 col-span-3 text-gray-500">
+                <p className="text-lg">No trips found.</p>
+                <button
+                  onClick={() => navigate("/create")}
+                  className="btn-primary mt-4 px-6 py-2 rounded-lg text-white text-sm"
+                >
+                  Create the first one →
+                </button>
+              </div>
+            ) : (
+              filteredTrips.map((trip) => (
+                <div
+                  key={trip.id}
+                  className="card-hover"
+                  style={{
+                    background: "#111827",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    cursor: "pointer",
+                  }}
+                >
+                  {/* Cover Image */}
+                  <div style={{ position: "relative", height: 200, overflow: "hidden" }}>
+                    {trip.coverUrl ? (
+                      <img
+                        src={trip.coverUrl}
+                        alt={trip.title}
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <div style={{
+                        height: "100%",
+                        background: "linear-gradient(135deg,#0f2027,#203a43,#2c5364)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}>
+                        <span style={{ fontSize: 12, color: "rgba(255,255,255,0.25)" }}>No cover image</span>
+                      </div>
+                    )}
+
+                    {/* Gradient overlay */}
+                    <div style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "linear-gradient(to top, rgba(13,17,23,0.9) 0%, transparent 60%)",
+                    }} />
+
+                    {/* Trip type badge */}
+                    {trip.tripType && (
+                      <div style={{ position: "absolute", top: 12, left: 12 }}>
+                        <span className="tag-pill" style={{ fontSize: 10, padding: "3px 8px", borderRadius: 999 }}>
+                          {trip.tripType}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div style={{ padding: "18px 20px 20px" }}>
+
+                    {/* Title */}
+                    <h3 style={{
+                      fontFamily: "'Fraunces', serif",
+                      fontWeight: 300,
+                      fontSize: 18,
+                      lineHeight: 1.3,
+                      marginBottom: 6,
+                      color: "#fff",
+                    }}>
+                      {trip.title}
+                    </h3>
+
+                    {/* Destination */}
+                    {trip.destination && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 12 }}>
+                        <svg width="12" height="12" fill="none" stroke="#5DCAA5" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span style={{ fontSize: 12, color: "#6B7280" }}>{trip.destination}</span>
+                      </div>
+                    )}
+
+                    {/* Divider */}
+                    <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "14px 0" }} />
+
+                    {/* Price + Duration */}
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
+                      <div>
+                        <div style={{ fontSize: 11, color: "#4B5563", marginBottom: 2 }}>FROM</div>
+                        <div className="grad-text" style={{ fontFamily: "'Fraunces', serif", fontWeight: 400, fontSize: 22 }}>
+                          ₹{Number(trip.price).toLocaleString()}
+                        </div>
+                        <div style={{ fontSize: 11, color: "#4B5563" }}>per person</div>
+                      </div>
+
+                      {(trip.startDate && trip.endDate) && (
+                        <div style={{ textAlign: "right" }}>
+                          <div style={{ fontSize: 11, color: "#4B5563", marginBottom: 2 }}>DURATION</div>
+                          <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: 22, color: "#fff" }}>
+                            {Math.max(1, Math.round((new Date(trip.endDate) - new Date(trip.startDate)) / 86400000))}
+                          </div>
+                          <div style={{ fontSize: 11, color: "#4B5563" }}>nights</div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Seats */}
+                    {trip.seats && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+                        <svg width="12" height="12" fill="none" stroke="#4B5563" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span style={{ fontSize: 12, color: "#4B5563" }}>{trip.seats} seats available</span>
+                      </div>
+                    )}
+
+                    {/* Stars */}
+                    <div style={{ display: "flex", gap: 3, marginBottom: 16 }}>
+                      {[1,2,3,4,5].map((i) => (
+                        <svg key={i} width="12" height="12" fill={i <= 4 ? "#f59e0b" : "rgba(255,255,255,0.15)"} viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                      ))}
+                      <span style={{ fontSize: 11, color: "#4B5563", marginLeft: 4 }}>New experience</span>
+                    </div>
+
+                    {/* Buttons */}
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button
+                        onClick={() => navigate("/details")}
+                        className="btn-primary"
+                        style={{ flex: 1, justifyContent: "center", fontSize: 13, padding: "10px 0", borderRadius: 10, color: "#fff", display: "flex", alignItems: "center" }}
+                      >
+                        View Trip
+                      </button>
+                      <button
+                        className="btn-primary"
+                        style={{ flex: 1, justifyContent: "center", fontSize: 13, padding: "10px 0", borderRadius: 10, color: "#fff", display: "flex", alignItems: "center" }}
+                      >
+                        Join
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              ))
+            )}
 
           </div>
         </div>

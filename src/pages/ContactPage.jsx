@@ -38,6 +38,8 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import Navbar from "../components/layout/Navbar";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 function useInView(threshold = 0.12) {
   const ref = useRef(null);
@@ -198,6 +200,7 @@ export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [focused, setFocused] = useState(null);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -205,6 +208,16 @@ export default function ContactPage() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, setUser);
+    return unsub;
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -281,20 +294,70 @@ export default function ContactPage() {
 
           <Link to="/contact" className="text-[13px] text-gray-400 hover:text-gray-100">
             Contact
-          </Link>          
+          </Link> 
+          <Link to="/explore" className="text-[13px] text-gray-400 hover:text-gray-100">
+            Explore
+          </Link>            
           {/* <button onClick={() => navigate("/auth")} className="text-[13px] text-white border border-white px-4 py-1.5 rounded-lg hover:bg-white hover:text-black hover:font-medium transition">
             Login / Sign Up
           </button> */}
-          <button onClick={() => navigate("/explore")} className="btn-primary text-white text-[13px] font-medium px-4 py-2 rounded-lg">Get started</button>
-          <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs">
-               AM
-         </div>
+          {user ? (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => { handleLogout(); setMenuOpen(false); }}
+                className="group text-[13px] text-white border w-[120px] border-white px-4 py-1.5 rounded-lg
+                           hover:bg-white hover:text-black hover:font-medium transition"
+              >
+                {/* Default text */}
+                <span className="block group-hover:hidden">
+                  {user.displayName || user.email}
+                </span>
+
+                {/* Hover text */}
+                <span className="hidden group-hover:block">
+                  Log out
+                </span>
+              </button>
+              
+            </div>
+          ) : (
+            <button
+              onClick={() => navigate("/auth")}
+              className="text-[13px] text-white border border-white px-4 py-1.5 rounded-lg
+                         hover:bg-white hover:text-black hover:font-medium transition"
+            >
+              Login
+            </button>
+          )}
         </div>
 
         <button className="md:hidden text-gray-400" onClick={() => setMenuOpen(!menuOpen)}>
           ☰
         </button>
       </div>
+      {menuOpen && (
+        <div className="md:hidden absolute right-6 mt-2 px-6 py-4 flex flex-col gap-4 bg-[#111827] rounded-lg shadow-lg w-max z-50">
+          <Link to="/about" className="text-gray-400 hover:text-white" onClick={() => setMenuOpen(false)}>About</Link>
+          <Link to="/contact" className="text-gray-400 hover:text-white" onClick={() => setMenuOpen(false)}>Contact</Link>
+          <Link to="/explore" className="text-gray-400 hover:text-white" onClick={() => setMenuOpen(false)}>Explore</Link>
+
+          {user ? (
+            <button
+              onClick={() => { handleLogout(); setMenuOpen(false); }}
+              className="text-white border border-white px-6 py-2 rounded-lg"
+            >
+              Log out
+            </button>
+          ) : (
+            <button
+              onClick={() => { navigate("/auth"); setMenuOpen(false); }}
+              className="text-white border border-white px-6 py-2 rounded-lg"
+            >
+              Login / Sign Up
+            </button>
+          )}
+        </div>
+      )}
     </nav>
 
 
