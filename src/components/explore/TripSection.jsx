@@ -113,50 +113,6 @@ export default function TripSection() {
         <div className="overflow-y-auto m-6 rounded-2xl px-6 py-6 bg-gray-300">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
 
-            {/* {filteredTrips.map((trip) => (
-              <div
-                key={trip.id}
-                className="bg-gray-900 flex flex-col rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition cursor-pointer"
-              >
-
-                <img
-                  src={trip.image}
-                  alt={trip.title}
-                  className="h-[180px] w-full object-cover"
-                />
-
-                <div className="flex flex-col gap-4 p-4 text-white">
-
-                  <div>
-                    <h3 className="font-semibold">
-                      {trip.title}
-                    </h3>
-                    <p className="text-sm text-gray-400">
-                      {trip.destination}
-                    </p>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span className="font-bold">₹{trip.price}</span>
-                    <span className="text-sm text-gray-400">
-                      {trip.duration}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <button onClick={() => navigate("/details")} className="btn-primary w-full text-white text-[13px] font-medium px-4 py-2 rounded-lg">
-                      View
-                    </button>
-                    <button className="btn-primary w-full text-white text-[13px] font-medium px-4 py-2 rounded-lg">
-                      Join
-                    </button>
-                  </div>
-
-                </div>
-
-              </div>
-            ))} */}
-
             {loading ? (
               <div className="flex items-center justify-center py-20 col-span-3">
                 <div className="w-6 h-6  rounded-full animate-spin" />
@@ -181,6 +137,9 @@ export default function TripSection() {
                     borderRadius: 16,
                     overflow: "hidden",
                     cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
                   }}
                 >
                   {/* Cover Image */}
@@ -280,6 +239,23 @@ export default function TripSection() {
                       </div>
                     )}
 
+                    {/* Dates */}
+                    {(trip.startDate && trip.endDate) && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
+                        <svg width="12" height="12" fill="none" stroke="#4B5563" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span style={{ fontSize: 12, color: "#4B5563" }}>
+                          {new Date(trip.startDate).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                          {" → "}
+                          {new Date(trip.endDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                        </span>
+                      </div>
+                    )}
+
+    
+                    
+
                     {/* Stars */}
                     <div style={{ display: "flex", gap: 3, marginBottom: 16 }}>
                       {[1,2,3,4,5].map((i) => (
@@ -287,7 +263,7 @@ export default function TripSection() {
                           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                         </svg>
                       ))}
-                      <span style={{ fontSize: 11, color: "#4B5563", marginLeft: 4 }}>New experience</span>
+                      
                     </div>
 
                     {/* Buttons */}

@@ -1,13 +1,45 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Icon from "./Icon";
 import { FormSection } from "./FormPrimitives";
 
+const CLOUD_NAME = "doqzpseyq";
+const UPLOAD_PRESET = "TripUnite";
+
 const CoverImageSection = ({ coverUrl, setCoverUrl }) => {
   const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleImage = (e) => {
+  const handleImage = async (e) => {
     const file = e.target.files[0];
-    if (file) setCoverUrl(URL.createObjectURL(file));
+    if (!file) return;
+
+    setUploading(true);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", UPLOAD_PRESET);
+      formData.append("cloud_name", CLOUD_NAME);
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        { method: "POST", body: formData }
+      );
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        setCoverUrl(data.secure_url);
+      } else {
+        setError("Upload failed. Please try again.");
+      }
+    } catch (err) {
+      setError("Upload failed. Please check your connection.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -26,7 +58,11 @@ const CoverImageSection = ({ coverUrl, setCoverUrl }) => {
           </div>
         </div>
       ) : (
-        <div className="upload-zone" onClick={() => fileRef.current?.click()}>
+        <div
+          className="upload-zone"
+          onClick={() => !uploading && fileRef.current?.click()}
+          style={{ opacity: uploading ? 0.6 : 1, cursor: uploading ? "not-allowed" : "pointer" }}
+        >
           <input
             ref={fileRef}
             type="file"
@@ -34,16 +70,44 @@ const CoverImageSection = ({ coverUrl, setCoverUrl }) => {
             style={{ display: "none" }}
             onChange={handleImage}
           />
-          <Icon name="upload" size={28} color="rgba(255,255,255,0.2)" />
-          <div style={{ marginTop: 12, fontSize: 14, color: "var(--text-dim)" }}>
-            Drop your cover image or{" "}
-            <span style={{ color: "var(--green-light)" }}>browse</span>
-          </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4 }}>
-            PNG, JPG up to 10MB · 16:9 recommended
-          </div>
+
+          {uploading ? (
+            <>
+              <div style={{
+                width: 28, height: 28,
+                border: "2px solid #1D9E75",
+                borderTopColor: "transparent",
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+              }} />
+              <div style={{ marginTop: 12, fontSize: 14, color: "var(--text-dim)" }}>
+                Uploading to Cloudinary...
+              </div>
+            </>
+          ) : (
+            <>
+              <Icon name="upload" size={28} color="rgba(255,255,255,0.2)" />
+              <div style={{ marginTop: 12, fontSize: 14, color: "var(--text-dim)" }}>
+                Drop your cover image or{" "}
+                <span style={{ color: "var(--green-light)" }}>browse</span>
+              </div>
+              <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4 }}>
+                PNG, JPG up to 10MB · 16:9 recommended
+              </div>
+            </>
+          )}
         </div>
       )}
+
+      {error && (
+        <p style={{ fontSize: 12, color: "#ef4444", marginTop: 8 }}>{error}</p>
+      )}
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </FormSection>
   );
 };

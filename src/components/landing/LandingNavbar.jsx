@@ -45,7 +45,7 @@ function LandingNavbar() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => { handleLogout(); setMenuOpen(false); }}
-                className="group text-[13px] text-white border border-white px-4 py-1.5 rounded-lg
+                className="group w-[120px] text-[13px] text-white border border-white px-4 py-1.5 rounded-lg
                            hover:bg-white hover:text-black hover:font-medium transition"
               >
                 {/* Default text */}

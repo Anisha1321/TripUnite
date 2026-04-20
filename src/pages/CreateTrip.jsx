@@ -15,6 +15,7 @@ import InclusionsSection  from "../components/createTrip/InclusionsSection";
 import RequirementsSection from "../components/createTrip/RequirementsSection";
 import PreviewCard     from "../components/createTrip/PreviewCard";
 import SidebarExtras   from "../components/createTrip/SidebarExtras";
+import TransportSection from "../components/createTrip/TransportSection";
 // ──────────────────────────────────────────────────────────────────────────
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
@@ -38,6 +39,9 @@ export default function CreateTrip() {
     inclusions: "",
     exclusions: "",
     requirements: "",
+    pickupPoint: "",   
+    dropPoint: "",     
+    transport: "",    
   });
   const handlePublish = async () => {
     try {
@@ -60,6 +64,7 @@ export default function CreateTrip() {
         createdBy: user.uid,
         createdByEmail: user.email,
         createdAt: serverTimestamp(),
+        status: "published",
       });
 
       alert("Trip published successfully!");
@@ -69,6 +74,28 @@ export default function CreateTrip() {
     } catch (err) {
       console.error(err);
       alert("Failed to publish trip.");
+    }
+  };
+
+  const handleSaveDraft = async () => {
+    try {
+      const user = auth.currentUser;
+      if (!user) { alert("You must be logged in."); return; }
+
+      await addDoc(collection(db, "trips"), {
+        ...form,
+        coverUrl: coverUrl || null,
+        itinerary,
+        createdBy: user.uid,
+        createdByEmail: user.email,
+        createdAt: serverTimestamp(),
+        status: "draft",  // KEY DIFFERENCE
+      });
+
+      alert("Draft saved!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save draft.");
     }
   };
 
@@ -101,6 +128,7 @@ export default function CreateTrip() {
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <BasicInfoSection    form={form} set={set} />
               <DatesSection        form={form} set={set} />
+              <TransportSection    form={form} set={set} /> 
               <PricingSection      form={form} set={set} />
               <CoverImageSection   coverUrl={coverUrl} setCoverUrl={setCoverUrl} />
               <ItinerarySection    itinerary={itinerary} addDay={addDay} removeDay={removeDay} updateDay={updateDay} />
@@ -113,7 +141,7 @@ export default function CreateTrip() {
                   <Icon name="send" size={15} />
                   Publish Trip
                 </button>
-                <button className="btn-outline" style={{ flex: "0 0 auto" }}>
+                <button onClick={handleSaveDraft} className="btn-outline" style={{ flex: "0 0 auto" }}>
                   <Icon name="save" size={14} />
                   Save Draft
                 </button>
