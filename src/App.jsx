@@ -41,6 +41,7 @@ import ContactPage from "./pages/ContactPage";
 import CreateTrip from "./pages/CreateTrip";
 import TripDetails from "./pages/TripDetails";
 import ProtectedRoute from "./components/landing/ProtectedRoute";
+import Dashboard from "./pages/DashboardPage";
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -81,6 +82,11 @@ function App() {
       <Route path="/details" element={
         <ProtectedRoute>
           <TripDetails />
+        </ProtectedRoute>
+      } />
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
         </ProtectedRoute>
       } />
     </Routes>
