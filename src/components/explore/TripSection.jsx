@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useEffect } from "react";
 
@@ -13,7 +13,7 @@ export default function TripSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(collection(db, "trips"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "trips"), where("status", "==", "published"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -27,6 +27,24 @@ export default function TripSection() {
 
   // 🔍 Filter logic
   const filteredTrips = trips.filter((trip) => {
+
+    const toDateSafe = (val) => {
+      if (!val) return null;
+      if (typeof val === 'string' && val.length >= 10) {
+        const parts = val.split('T')[0].split('-');
+        if (parts.length === 3) return new Date(+parts[0], +parts[1] - 1, +parts[2]);
+      }
+      return new Date(val);
+    };
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+    const endDate = toDateSafe(trip.endDate);
+    
+    if (endDate && endDate < today) {
+      return false; 
+    }
+
     const matchesSearch =
       trip.title.toLowerCase().includes(search.toLowerCase()) ||
       trip.destination.toLowerCase().includes(search.toLowerCase());

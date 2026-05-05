@@ -72,7 +72,15 @@ function App() {
         element={user ? <Navigate to="/" replace /> : <AuthPage />}
       />
 
+
+
       {/* Protected routes */}
+      <Route path="/create/:tripId" element={
+        <ProtectedRoute>
+          <CreateTrip />
+        </ProtectedRoute>
+      } />
+      
       <Route path="/create" element={
         <ProtectedRoute>
           <CreateTrip />

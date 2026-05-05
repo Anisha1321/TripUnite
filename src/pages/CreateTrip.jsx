@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/explore/Navbar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams  } from "react-router-dom";
 
 // ── CreateTrip sub-components ──────────────────────────────────────────────
 import GlobalStyles    from "../components/createTrip/GlobalStyles";
@@ -17,32 +17,81 @@ import PreviewCard     from "../components/createTrip/PreviewCard";
 import SidebarExtras   from "../components/createTrip/SidebarExtras";
 import TransportSection from "../components/createTrip/TransportSection";
 // ──────────────────────────────────────────────────────────────────────────
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, updateDoc, doc, getDoc, serverTimestamp,} from "firebase/firestore";
 import { db } from "../firebase";
 import { auth } from "../firebase";
 
+const EMPTY_FORM = {
+  title: "", destination: "", tripType: "", difficulty: "",
+  description: "", startDate: "", endDate: "", price: "",
+  seats: "", inclusions: "", exclusions: "", requirements: "",
+  pickupPoint: "", dropPoint: "", transport: "",    
+};
+
 
 export default function CreateTrip() {
+  const { tripId } = useParams(); 
+  const isEditMode = Boolean(tripId);
   const [coverUrl, setCoverUrl]   = useState(null);
   const [itinerary, setItinerary] = useState([{ id: 1, title: "", description: "" }]);
+  const [loadingDraft, setLoadingDraft] = useState(isEditMode);
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    title: "",
-    destination: "",
-    tripType: "",
-    difficulty: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    price: "",
-    seats: "",
-    inclusions: "",
-    exclusions: "",
-    requirements: "",
-    pickupPoint: "",   
-    dropPoint: "",     
-    transport: "",    
-  });
+  
+  //Use EMPTY_FORM for cleaner state
+  const [form, setForm] = useState(EMPTY_FORM);
+
+  //Fetch data if we are in edit mode
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    async function loadDraft() {
+      try {
+        const snap = await getDoc(doc(db, "trips", tripId));
+        if (!snap.exists()) {
+          alert("Trip not found.");
+          navigate("/dashboard");
+          return;
+        }
+
+        const data = snap.data();
+
+        setForm({
+          title:        data.title        || "",
+          destination:  data.destination  || "",
+          tripType:     data.tripType     || "",
+          difficulty:   data.difficulty   || "",
+          description:  data.description  || "",
+          startDate:    data.startDate    || "",
+          endDate:      data.endDate      || "",
+          price:        data.price        || "",
+          seats:        data.seats        || "",
+          inclusions:   data.inclusions   || "",
+          exclusions:   data.exclusions   || "",
+          requirements: data.requirements || "",
+          pickupPoint:  data.pickupPoint  || "",
+          dropPoint:    data.dropPoint    || "",
+          transport:    data.transport    || "",
+        });
+
+        setCoverUrl(data.coverUrl || null);
+        setItinerary(
+          data.itinerary?.length
+            ? data.itinerary
+            : [{ id: 1, title: "", description: "" }]
+        );
+      } catch (err) {
+        console.error("Failed to load draft:", err);
+        alert("Could not load the trip.");
+        navigate("/dashboard");
+      } finally {
+        setLoadingDraft(false);
+      }
+    }
+
+    loadDraft();
+  }, [tripId]);
+
+
   const handlePublish = async () => {
     try {
       const user = auth.currentUser;
@@ -57,18 +106,29 @@ export default function CreateTrip() {
         return;
       }
 
-      await addDoc(collection(db, "trips"), {
-        ...form,
-        coverUrl: coverUrl || null,
-        itinerary,
-        createdBy: user.uid,
-        createdByEmail: user.email,
-        createdAt: serverTimestamp(),
-        status: "published",
-      });
+      //Add update logic for edit mode
+      if (isEditMode) {
+        await updateDoc(doc(db, "trips", tripId), {
+          ...form,
+          coverUrl: coverUrl || null,
+          itinerary,
+          status: "published",
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        // YOUR EXACT ORIGINAL CREATE LOGIC
+        await addDoc(collection(db, "trips"), {
+          ...form,
+          coverUrl: coverUrl || null,
+          itinerary,
+          createdBy: user.uid,
+          createdByEmail: user.email,
+          createdAt: serverTimestamp(),
+          status: "published",
+        });
+      }
 
       alert("Trip published successfully!");
-      // Optionally navigate to explore after publishing
       navigate("/explore");
 
     } catch (err) {
@@ -82,17 +142,29 @@ export default function CreateTrip() {
       const user = auth.currentUser;
       if (!user) { alert("You must be logged in."); return; }
 
-      await addDoc(collection(db, "trips"), {
-        ...form,
-        coverUrl: coverUrl || null,
-        itinerary,
-        createdBy: user.uid,
-        createdByEmail: user.email,
-        createdAt: serverTimestamp(),
-        status: "draft",  // KEY DIFFERENCE
-      });
+      if (isEditMode) {
+        await updateDoc(doc(db, "trips", tripId), {
+          ...form,
+          coverUrl: coverUrl || null,
+          itinerary,
+          status: "draft",
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        // YOUR EXACT ORIGINAL DRAFT LOGIC
+        await addDoc(collection(db, "trips"), {
+          ...form,
+          coverUrl: coverUrl || null,
+          itinerary,
+          createdBy: user.uid,
+          createdByEmail: user.email,
+          createdAt: serverTimestamp(),
+          status: "draft",
+        });
+      }
 
       alert("Draft saved!");
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       alert("Failed to save draft.");
@@ -107,6 +179,32 @@ export default function CreateTrip() {
   const removeDay = (id) => setItinerary((d) => d.filter((x) => x.id !== id));
   const updateDay = (id, key, val) =>
     setItinerary((d) => d.map((x) => (x.id === id ? { ...x, [key]: val } : x)));
+
+  //Show spinner while fetching draft data
+  if (loadingDraft) {
+    return (
+      <>
+        <GlobalStyles />
+        <div style={{ minHeight: "100vh", background: "#0D1117", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Navbar />
+          <div style={{ textAlign: "center" }}>
+            <div style={{
+              width: 36, height: 36, margin: "0 auto 16px",
+              border: "2px solid #1D9E75",
+              borderTopColor: "transparent",
+              borderRadius: "50%",
+              animation: "spin 0.8s linear infinite",
+            }} />
+            <p style={{ color: "#8b949e", fontSize: 14 }}>Loading draft...</p>
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+
+
 
   return (
     <>
@@ -143,7 +241,7 @@ export default function CreateTrip() {
                 </button>
                 <button onClick={handleSaveDraft} className="btn-outline" style={{ flex: "0 0 auto" }}>
                   <Icon name="save" size={14} />
-                  Save Draft
+                  {isEditMode ? "Update Draft" : "Save Draft"}
                 </button>
               </div>
             </div>

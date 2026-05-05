@@ -1,7 +1,9 @@
 import Badge from "./Badge";
 import { Icon, Icons } from "./Icons";
+import { useNavigate } from "react-router-dom";
 
 export default function TripCard({ trip, dimmed = false }) {
+  const navigate = useNavigate();
   return (
     <div
       className="card"
@@ -65,7 +67,7 @@ export default function TripCard({ trip, dimmed = false }) {
           </button>
         )}
         {trip.showEdit && (
-          <button className="btn-primary" style={{ padding: "6px 16px", fontSize: 12 }}>
+          <button className="btn-primary" style={{ padding: "6px 16px", fontSize: 12 }} onClick={() => navigate(`/create/${trip.id}`)}>
             <Icon d={Icons.edit} size={13} /> Edit
           </button>
         )}
