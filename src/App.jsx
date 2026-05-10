@@ -65,7 +65,8 @@ function App() {
       <Route path="/about" element={<Aboutpage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/explore" element={<ExploreTripPage />} />
-
+      <Route path="/details/:tripId" element={<TripDetails />} />
+      
       {/* Redirect to home if already logged in */}
       <Route
         path="/auth"

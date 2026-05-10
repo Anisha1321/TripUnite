@@ -7,21 +7,27 @@ import { useEffect } from "react";
 export default function TripSection() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [sort, setSort] = useState("nearest");
   const navigate = useNavigate();
 
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(collection(db, "trips"), where("status", "==", "published"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "trips"), where("status", "==", "published"));
     const unsub = onSnapshot(q, (snapshot) => {
+      console.log("snapshot size:", snapshot.size);
+      console.log("docs:", snapshot.docs.map(d => d.data()));
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setTrips(data);
       setLoading(false);
-    });
+    },(error) => {
+    console.error("Firestore error:", error); 
+    setLoading(false);
+  });
     return unsub;
   }, []);
 
@@ -55,9 +61,17 @@ export default function TripSection() {
       (filter === "mid" && trip.price >= 10000 && trip.price <= 20000) ||
       (filter === "high" && trip.price > 20000);
 
+    
+
     return matchesSearch && matchesFilter;
   });
-  
+
+  const sortedTrips = [...filteredTrips].sort((a, b) => {
+      const dateA = new Date(a.startDate) || 0;
+      const dateB = new Date(b.startDate) || 0;
+      return sort === "nearest" ? dateA - dateB : dateB - dateA;
+    });
+
 
   return (
     <div className="flex h-screen relative ">
@@ -110,7 +124,20 @@ export default function TripSection() {
             <option className="text-black" value="mid">₹10,000 - ₹20,000</option>
             <option className="text-black" value="high">Above ₹20,000</option>
           </select>
+
+          <label className="block text-[13px] font-medium mb-2 mt-4 transition-colors hover:text-green-400" style={{ color: "#5DCAA5" }}>Sort by Date</label>
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="w-full outline-none text-white font-medium btn-primary text-[14px] px-3 py-2 rounded-lg"
+          >
+            <option className="text-black" value="nearest">Nearest First</option>
+            <option className="text-black" value="latest">Latest First</option>
+          </select>
+
         </div>
+
+        
 
       </aside>
 
@@ -128,14 +155,14 @@ export default function TripSection() {
         </div>
 
         {/* ✅ Scrollable Content */}
-        <div className="overflow-y-auto m-6 rounded-2xl px-6 py-6 bg-gray-300">
+        <div className="overflow-y-auto m-6 rounded-2xl px-6 py-6 bg-[#0D1117]">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
 
             {loading ? (
               <div className="flex items-center justify-center py-20 col-span-3">
                 <div className="w-6 h-6  rounded-full animate-spin" />
               </div>
-            ) : filteredTrips.length === 0 ? (
+            ) : sortedTrips.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 col-span-3 text-gray-500">
                 <p className="text-lg">No trips found.</p>
                 <button
@@ -146,7 +173,7 @@ export default function TripSection() {
                 </button>
               </div>
             ) : (
-              filteredTrips.map((trip) => (
+              sortedTrips.map((trip) => (
                 <div
                   key={trip.id}
                   className="card-hover"
@@ -287,7 +314,7 @@ export default function TripSection() {
                     {/* Buttons */}
                     <div style={{ display: "flex", gap: 8 }}>
                       <button
-                        onClick={() => navigate("/details")}
+                        onClick={() => navigate(`/details/${trip.id}`)}
                         className="btn-primary"
                         style={{ flex: 1, justifyContent: "center", fontSize: 13, padding: "10px 0", borderRadius: 10, color: "#fff", display: "flex", alignItems: "center" }}
                       >
